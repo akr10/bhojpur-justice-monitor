@@ -2,8 +2,22 @@ import CaseTimelineTracker from "@/components/CaseTimelineTracker";
 import CivicAssistantChat from "@/components/ai-assistant/CivicAssistantChat";
 import FloodAidAccountabilityTable from "@/components/FloodAidAccountabilityTable";
 import Hero from "@/components/Hero";
+import {
+  getCommunityGrievances,
+  toAccountabilityRow,
+} from "@/lib/grievances";
+import { fetchNewsFeed } from "@/lib/news-feed";
 
-export default function Home() {
+export const revalidate = 600;
+
+export default async function Home() {
+  const [newsItems, communityGrievances] = await Promise.all([
+    fetchNewsFeed(),
+    getCommunityGrievances(),
+  ]);
+
+  const communityRecords = communityGrievances.map(toAccountabilityRow);
+
   return (
     <main className="flex flex-1 flex-col">
       <Hero />
@@ -21,12 +35,13 @@ export default function Home() {
             Facts & Timeline
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
-            Verified public milestones catalogued from district bulletins and
-            official government orders.
+            Verified public milestones plus live press syndication for Bhojpur
+            encounter coverage—cached for fast loads, refreshed every 10
+            minutes.
           </p>
         </div>
 
-        <CaseTimelineTracker />
+        <CaseTimelineTracker newsItems={newsItems} />
       </section>
 
       <section
@@ -42,12 +57,12 @@ export default function Home() {
             Flood Impact Data
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:text-base">
-            Searchable grievance register covering 612 affected families across
-            Bhojpur village areas.
+            Searchable grievance register with anonymous community submissions
+            stored in serverless KV.
           </p>
         </div>
 
-        <FloodAidAccountabilityTable />
+        <FloodAidAccountabilityTable communityRecords={communityRecords} />
       </section>
 
       <section

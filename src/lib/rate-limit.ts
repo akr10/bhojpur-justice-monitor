@@ -8,11 +8,7 @@ type Bucket = {
 
 const memoryBuckets = new Map<string, Bucket>();
 
-function isKvConfigured(): boolean {
-  return Boolean(
-    process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN,
-  );
-}
+import { getKv, isKvConfigured } from "@/lib/kv-client";
 
 function rateLimitInMemory(key: string): boolean {
   const now = Date.now();
@@ -29,7 +25,7 @@ function rateLimitInMemory(key: string): boolean {
 }
 
 async function rateLimitWithKv(key: string): Promise<boolean> {
-  const { kv } = await import("@vercel/kv");
+  const kv = await getKv();
   const bucketKey = `rate_limit:chat:${key}`;
   const count = await kv.incr(bucketKey);
 
