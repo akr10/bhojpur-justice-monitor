@@ -3,8 +3,10 @@ import {
   floodReliefRecords,
   floodReliefSummary,
 } from "@/data/civicData";
+import type { NewsFeedItem } from "@/lib/news-feed";
 
 const SAMPLE_RECORD_COUNT = 20;
+const MAX_NEWS_CONTEXT_ITEMS = 15;
 
 function buildVillageBreakdown() {
   const counts = new Map<string, number>();
@@ -32,9 +34,32 @@ export function buildCivicDataContext(): string {
   return JSON.stringify(payload, null, 2);
 }
 
-export function buildFullSystemPrompt(basePrompt: string): string {
+function buildLegalNewsContext(newsItems: NewsFeedItem[]): string {
+  if (newsItems.length === 0) {
+    return "No legal news feed items available in this session.";
+  }
+
+  const payload = newsItems.slice(0, MAX_NEWS_CONTEXT_ITEMS).map((item) => ({
+    title: item.title,
+    eventDate: item.eventDate,
+    summary: item.summary,
+    source: item.source,
+    sourceUrl: item.sourceUrl,
+    legalNewsSource: true,
+  }));
+
+  return JSON.stringify(payload, null, 2);
+}
+
+export function buildFullSystemPrompt(
+  basePrompt: string,
+  newsItems: NewsFeedItem[] = [],
+): string {
   return `${basePrompt}
 
 ## Verified civicData (JSON — sole factual source)
-${buildCivicDataContext()}`;
+${buildCivicDataContext()}
+
+## Legal news feed (JSON — factual source when source field begins with "Sourced via")
+${buildLegalNewsContext(newsItems)}`;
 }

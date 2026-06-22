@@ -2,6 +2,7 @@ import { google } from "@ai-sdk/google";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { CIVIC_ASSISTANT_SYSTEM_PROMPT } from "@/components/ai-assistant/civic_assistant_system_prompt";
 import { buildFullSystemPrompt } from "@/lib/civic-context";
+import { fetchNewsFeed } from "@/lib/news-feed";
 
 export const maxDuration = 30;
 
@@ -34,9 +35,11 @@ export async function POST(req: Request) {
     return Response.json({ error: "Messages must be an array." }, { status: 400 });
   }
 
+  const newsItems = await fetchNewsFeed();
+
   const result = streamText({
     model: google("gemini-2.5-flash"),
-    system: buildFullSystemPrompt(CIVIC_ASSISTANT_SYSTEM_PROMPT),
+    system: buildFullSystemPrompt(CIVIC_ASSISTANT_SYSTEM_PROMPT, newsItems),
     messages: await convertToModelMessages(messages),
   });
 

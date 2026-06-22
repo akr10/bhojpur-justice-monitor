@@ -66,9 +66,9 @@ function buildTimeline(
 
   const liveEntries: TimelineEntry[] = newsItems.map((item) => ({
     id: item.id,
-    date: item.date,
+    date: item.eventDate,
     title: item.title,
-    description: item.description,
+    description: item.summary,
     source: item.source,
     sourceUrl: item.sourceUrl,
     category: item.category,

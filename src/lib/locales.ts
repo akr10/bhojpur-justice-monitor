@@ -102,6 +102,9 @@ export type LocaleStrings = {
     langHindi: string;
     langEnglish: string;
   };
+  footer: {
+    legalDisclaimer: string;
+  };
 };
 
 export const locales: Record<LocaleLang, LocaleStrings> = {
@@ -255,6 +258,10 @@ export const locales: Record<LocaleLang, LocaleStrings> = {
       langHindi: "Hindi",
       langEnglish: "English",
     },
+    footer: {
+      legalDisclaimer:
+        "Legal Disclaimer: This application is an independent, non-profit civic tech dashboard built exclusively for public data transparency and community legal awareness. All timelines, milestones, and statistical data displayed here are compiled strictly from verified mainstream media networks and official government department bulletins. This portal does not generate independent claims, host unverified personal allegations, or provide biased commentary. The automated RTI generator is a general drafting utility tool and does not constitute formal legal counsel.",
+    },
   },
   hi: {
     nav: {
@@ -404,6 +411,10 @@ export const locales: Record<LocaleLang, LocaleStrings> = {
       langBhojpuri: "भोजपुरी",
       langHindi: "हिंदी",
       langEnglish: "English",
+    },
+    footer: {
+      legalDisclaimer:
+        "कानूनी अस्वीकरण: यह एप्लिकेशन एक स्वतंत्र, गैर-लाभकारी सिविक टेक डैशबोर्ड है जिसे विशेष रूप से सार्वजनिक डेटा पारदर्शिता और सामुदायिक कानूनी जागरूकता के लिए बनाया गया है। यहां प्रदर्शित सभी समयसीमाएं, मील के पत्थर और सांख्यिकीय डेटा पूरी तरह से सत्यापित मुख्यधारा के समाचार मीडिया नेटवर्क और आधिकारिक सरकारी विभाग के बुलेटिनों से संकलित किए गए हैं। यह पोर्टल स्वतंत्र दावे उत्पन्न नहीं करता है, असत्यापित व्यक्तिगत आरोपों को होस्ट नहीं करता है, या पक्षपातपूर्ण टिप्पणी प्रदान नहीं करता है। स्वचालित आरटीआई जनरेटर एक सामान्य ड्राफ्टिंग उपयोगिता उपकरण है और यह औपचारिक कानूनी सलाह नहीं है।",
     },
   },
 };
