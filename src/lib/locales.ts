@@ -35,6 +35,8 @@ export type LocaleStrings = {
     description: string;
     empty: string;
     sourceLabel: string;
+    fairDealingNote: string;
+    readOriginalReport: string;
     categories: {
       encounter: string;
       judicial: string;
@@ -104,6 +106,37 @@ export type LocaleStrings = {
   };
   footer: {
     legalDisclaimer: string;
+    privacyPolicy: string;
+    grievanceOfficer: string;
+    legalNavAria: string;
+  };
+  legal: {
+    backHome: string;
+  };
+  privacy: {
+    title: string;
+    intro: string;
+    dataMinimizationTitle: string;
+    dataMinimization: string;
+    anonymousGrievancesTitle: string;
+    anonymousGrievances: string;
+    dpdpTitle: string;
+    dpdpBody: string;
+    intermediaryTitle: string;
+    intermediaryBody: string;
+  };
+  contact: {
+    title: string;
+    intro: string;
+    grievanceOfficerTitle: string;
+    grievanceOfficerBody: string;
+    emailLabel: string;
+    scopeTitle: string;
+    scopeBody: string;
+    responseTitle: string;
+    responseBody: string;
+    transparencyTitle: string;
+    transparencyBody: string;
   };
 };
 
@@ -153,6 +186,9 @@ export const locales: Record<LocaleLang, LocaleStrings> = {
         "Verified milestones plus live syndicated updates from trusted press sources (refreshed every 10 minutes).",
       empty: "No timeline entries available.",
       sourceLabel: "Source",
+      fairDealingNote:
+        "Syndicated news entries display a neutral one-sentence summary, explicit publisher attribution, and a direct link to the original report (Copyright Act §52 fair dealing).",
+      readOriginalReport: "Read original report at publisher",
       categories: {
         encounter: "Incident",
         judicial: "Judicial",
@@ -261,6 +297,47 @@ export const locales: Record<LocaleLang, LocaleStrings> = {
     footer: {
       legalDisclaimer:
         "Legal Disclaimer: This application is an independent, non-profit civic tech dashboard built exclusively for public data transparency and community legal awareness. All timelines, milestones, and statistical data displayed here are compiled strictly from verified mainstream media networks and official government department bulletins. This portal does not generate independent claims, host unverified personal allegations, or provide biased commentary. The automated RTI generator is a general drafting utility tool and does not constitute formal legal counsel.",
+      privacyPolicy: "Privacy Policy",
+      grievanceOfficer: "Grievance Officer",
+      legalNavAria: "Legal and compliance links",
+    },
+    legal: {
+      backHome: "Back to home",
+    },
+    privacy: {
+      title: "Privacy Policy",
+      intro:
+        "Bhojpur Justice Monitor is a non-profit civic transparency utility. This policy explains how we handle data in plain language, in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and applicable Indian IT rules.",
+      dataMinimizationTitle: "Data Minimization",
+      dataMinimization:
+        "Data Minimization: This platform operates on a strict zero-collection policy. We do not track, log, or store user IP addresses, browser cookies, device fingerprints, or personal identifiers.",
+      anonymousGrievancesTitle: "Anonymous Grievances",
+      anonymousGrievances:
+        "Anonymous Grievances: Any data submitted through the public grievance form is stored securely and anonymously solely to display community flood aid metrics.",
+      dpdpTitle: "DPDP Act 2023 Alignment",
+      dpdpBody:
+        "We process only the minimum anonymous grievance fields you voluntarily submit. We do not build user profiles, sell data, or share information with third-party advertisers. You may request correction of community-submitted records by contacting our Grievance Officer.",
+      intermediaryTitle: "Intermediary Status",
+      intermediaryBody:
+        "This portal acts as a good-faith intermediary that aggregates verified public information. For takedown requests, data corrections, or legal notices, please use our Grievance Officer contact page.",
+    },
+    contact: {
+      title: "Grievance Officer & Legal Contact",
+      intro:
+        "Under the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, this portal maintains a dedicated grievance redressal channel for users, news agencies, and government departments.",
+      grievanceOfficerTitle: "Designated Grievance Officer",
+      grievanceOfficerBody:
+        "Send official takedown notices, copyright concerns, factual correction requests, or intermediary compliance queries to the email below. Include the specific URL, timeline entry, or dataset reference in your message.",
+      emailLabel: "Public grievance email",
+      scopeTitle: "Who may contact us",
+      scopeBody:
+        "Residents, journalists, news publishers, civil society groups, and government departments may use this channel to report data errors, request corrections, or submit lawful removal notices regarding syndicated content.",
+      responseTitle: "Response timeline",
+      responseBody:
+        "All valid complaints are acknowledged within 7 days and addressed transparently. Where a correction or takedown is warranted, we will update or remove the referenced material and document the action taken.",
+      transparencyTitle: "Transparency commitment",
+      transparencyBody:
+        "We do not collect personal identifiers with grievance correspondence. Please avoid sending sensitive personal data unless strictly necessary for your complaint.",
     },
   },
   hi: {
@@ -308,6 +385,9 @@ export const locales: Record<LocaleLang, LocaleStrings> = {
         "सत्यापित मील के पत्थर और विश्वसनीय प्रेस स्रोतों से लाइव अपडेट (हर 10 मिनट में रिफ्रेश)।",
       empty: "कोई समयरेखा प्रविष्टि उपलब्ध नहीं।",
       sourceLabel: "स्रोत",
+      fairDealingNote:
+        "सिंडिकेटेड समाचार प्रविष्टियाँ एक तटस्थ एक-वाक्य सारांश, स्पष्ट प्रकाशक attribution, और मूल रिपोर्ट का सीधा लिंक दिखाती हैं (कॉपीराइट अधिनियम §52 उचित व्यवहार)।",
+      readOriginalReport: "प्रकाशक की मूल रिपोर्ट पढ़ें",
       categories: {
         encounter: "घटना",
         judicial: "न्यायिक",
@@ -415,6 +495,47 @@ export const locales: Record<LocaleLang, LocaleStrings> = {
     footer: {
       legalDisclaimer:
         "कानूनी अस्वीकरण: यह एप्लिकेशन एक स्वतंत्र, गैर-लाभकारी सिविक टेक डैशबोर्ड है जिसे विशेष रूप से सार्वजनिक डेटा पारदर्शिता और सामुदायिक कानूनी जागरूकता के लिए बनाया गया है। यहां प्रदर्शित सभी समयसीमाएं, मील के पत्थर और सांख्यिकीय डेटा पूरी तरह से सत्यापित मुख्यधारा के समाचार मीडिया नेटवर्क और आधिकारिक सरकारी विभाग के बुलेटिनों से संकलित किए गए हैं। यह पोर्टल स्वतंत्र दावे उत्पन्न नहीं करता है, असत्यापित व्यक्तिगत आरोपों को होस्ट नहीं करता है, या पक्षपातपूर्ण टिप्पणी प्रदान नहीं करता है। स्वचालित आरटीआई जनरेटर एक सामान्य ड्राफ्टिंग उपयोगिता उपकरण है और यह औपचारिक कानूनी सलाह नहीं है।",
+      privacyPolicy: "गोपनीयता नीति",
+      grievanceOfficer: "शिकायत अधिकारी",
+      legalNavAria: "कानूनी और अनुपालन लिंक",
+    },
+    legal: {
+      backHome: "होम पर वापस",
+    },
+    privacy: {
+      title: "गोपनीयता नीति",
+      intro:
+        "भोजपुर जस्टिस मॉनिटर एक गैर-लाभकारी नागरिक पारदर्शिता उपयोगिता है। यह नीति सरल भाषा में बताती है कि हम डिजिटल व्यक्तिगत डेटा संरक्षण (DPDP) अधिनियम, 2023 और भारतीय IT नियमों के अनुसार डेटा कैसे संभालते हैं।",
+      dataMinimizationTitle: "डेटा न्यूनीकरण",
+      dataMinimization:
+        "डेटा न्यूनीकरण: यह प्लेटफ़ॉर्म सख्त शून्य-संग्रह नीति पर संचालित होता है। हम उपयोगकर्ता IP पते, ब्राउज़र कुकी, डिवाइस फ़िंगरप्रिंट, या व्यक्तिगत पहचानकर्ता को ट्रैक, लॉग, या संग्रहीत नहीं करते हैं।",
+      anonymousGrievancesTitle: "अनाम शिकायतें",
+      anonymousGrievances:
+        "अनाम शिकायतें: सार्वजनिक शिकायत फ़ॉर्म के माध्यम से जमा किया गया कोई भी डेटा केवल समुदाय बाढ़ सहायता मेट्रिक्स प्रदर्शित करने के लिए सुरक्षित और अनाम रूप से संग्रहीत किया जाता है।",
+      dpdpTitle: "DPDP अधिनियम 2023 संरेखण",
+      dpdpBody:
+        "हम केवल वही न्यूनतम अनाम शिकायत फ़ील्ड संसाधित करते हैं जो आप स्वेच्छा से जमा करते हैं। हम उपयोगकर्ता प्रोफ़ाइल नहीं बनाते, डेटा नहीं बेचते, और तृतीय-पक्ष विज्ञापनदाताओं के साथ जानकारी साझा नहीं करते। समुदाय-जमा रिकॉर्ड सुधार के लिए हमारे शिकायत अधिकारी से संपर्क करें।",
+      intermediaryTitle: "मध्यस्थ स्थिति",
+      intermediaryBody:
+        "यह पोर्टल सत्यापित सार्वजनिक जानकारी को एकत्र करने वाला सद्भावनापूर्ण मध्यस्थ है। हटाने के अनुरोध, डेटा सुधार, या कानूनी नोटिस के लिए कृपया हमारे शिकायत अधिकारी संपर्क पृष्ठ का उपयोग करें।",
+    },
+    contact: {
+      title: "शिकायत अधिकारी और कानूनी संपर्क",
+      intro:
+        "सूचना प्रौद्योगिकी (मध्यस्थ दिशानिर्देश और डिजिटल मीडिया आचार संहिता) नियमों के तहत, यह पोर्टल उपयोगकर्ताओं, समाचार एजेंसियों और सरकारी विभागों के लिए एक समर्पित शिकायत निवारण चैनल बनाए रखता है।",
+      grievanceOfficerTitle: "नियुक्त शिकायत अधिकारी",
+      grievanceOfficerBody:
+        "आधिकारिक हटाने के नोटिस, कॉपीराइट संबंधी चिंताएं, तथ्यात्मक सुधार अनुरोध, या मध्यस्थ अनुपालन प्रश्न नीचे दिए ईमेल पर भेजें। अपने संदेश में विशिष्ट URL, समयरेखा प्रविष्टि, या डेटासेट संदर्भ शामिल करें।",
+      emailLabel: "सार्वजनिक शिकायत ईमेल",
+      scopeTitle: "कौन संपर्क कर सकता है",
+      scopeBody:
+        "निवासी, पत्रकार, समाचार प्रकाशक, नागरिक समाज समूह, और सरकारी विभाग डेटा त्रुटियों की रिपोर्ट करने, सुधार का अनुरोध करने, या सिंडिकेटेड सामग्री पर कानूनी हटाने के नोटिस जमा करने के लिए इस चैनल का उपयोग कर सकते हैं।",
+      responseTitle: "प्रतिक्रिया समयरेखा",
+      responseBody:
+        "सभी वैध शिकायतों की 7 दिनों के भीतर स्वीकृति दी जाती है और पारदर्शी रूप से संबोधित की जाती है। जहाँ सुधार या हटाने की आवश्यकता हो, हम संदर्भित सामग्री को अपडेट या हटा देंगे और की गई कार्रवाई का दस्तावेजीकरण करेंगे।",
+      transparencyTitle: "पारदर्शिता प्रतिबद्धता",
+      transparencyBody:
+        "हम शिकायत पत्राचार के साथ व्यक्तिगत पहचानकर्ता एकत्र नहीं करते। कृपया संवेदनशील व्यक्तिगत डेटा तभी भेजें जब आपकी शिकायत के लिए यह अत्यंत आवश्यक हो।",
     },
   },
 };
