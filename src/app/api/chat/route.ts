@@ -7,12 +7,17 @@ import { buildFullSystemPrompt } from "@/lib/civic-context";
 
 export const maxDuration = 30;
 
+function isOpenAiKeyConfigured(): boolean {
+  const key = process.env.OPENAI_API_KEY?.trim();
+  return Boolean(key && key !== "your_openai_api_key_here");
+}
+
 export async function POST(req: Request) {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!isOpenAiKeyConfigured()) {
     return Response.json(
       {
         error:
-          "OPENAI_API_KEY is not configured. Add it to .env.local to enable the civic assistant.",
+          "OPENAI_API_KEY is not configured. Add a valid key to .env.local and restart the dev server.",
       },
       { status: 503 },
     );
@@ -42,5 +47,15 @@ export async function POST(req: Request) {
     messages: await convertToModelMessages(messages),
   });
 
-  return result.toUIMessageStreamResponse();
+  return result.toUIMessageStreamResponse({
+    onError: (streamError) => {
+      if (process.env.NODE_ENV === "development") {
+        return streamError instanceof Error
+          ? streamError.message
+          : "Model request failed.";
+      }
+
+      return "The civic assistant is temporarily unavailable. Please try again later.";
+    },
+  });
 }

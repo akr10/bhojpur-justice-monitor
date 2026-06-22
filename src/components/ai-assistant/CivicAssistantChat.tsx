@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import type { UIMessage } from "ai";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useSpeechRecognition } from "@/hooks/useSpeechRecognition";
+import { formatChatError } from "@/lib/format-chat-error";
 import ChatMessageContent from "./ChatMessageContent";
 import { ASSISTANT_IDENTITY, SUPPORTED_LANGUAGES } from "./prompt-config";
 
@@ -101,6 +102,7 @@ export default function CivicAssistantChat() {
   const isBusy = status === "submitted" || status === "streaming";
   const isAwaitingResponse = status === "submitted";
   const canSend = draft.trim().length > 0 && status === "ready";
+  const chatError = formatChatError(error);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -126,7 +128,7 @@ export default function CivicAssistantChat() {
             <span
               aria-hidden="true"
               className={`h-2 w-2 rounded-full ${
-                error ? "bg-red-500" : isBusy ? "bg-amber-400 animate-pulse" : "bg-emerald-500"
+                error || chatError ? "bg-red-500" : isBusy ? "bg-amber-400 animate-pulse" : "bg-emerald-500"
               }`}
             />
             <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
@@ -212,9 +214,9 @@ export default function CivicAssistantChat() {
         <div ref={messagesEndRef} />
       </div>
 
-      {(error || speechError) && (
+      {(chatError || speechError) && (
         <div className="border-t border-zinc-800 bg-red-950/20 px-4 py-2 text-xs text-red-300 sm:text-sm">
-          {error?.message ?? speechError}
+          {chatError ?? speechError}
         </div>
       )}
 
