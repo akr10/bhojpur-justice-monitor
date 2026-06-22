@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import GrievanceSubmissionForm from "@/components/GrievanceSubmissionForm";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   floodReliefRecords,
   floodReliefSummary,
@@ -56,6 +57,7 @@ export default function FloodAidAccountabilityTable({
   communityRecords = [],
 }: FloodAidAccountabilityTableProps) {
   const router = useRouter();
+  const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
 
@@ -88,31 +90,38 @@ export default function FloodAidAccountabilityTable({
     setPage(1);
   }
 
+  function translateStatus(status: ReliefStatus) {
+    return t.flood.statuses[status] ?? status;
+  }
+
+  function translateGrievance(type: string) {
+    return t.flood.grievanceTypes[type] ?? type;
+  }
+
+  const tableDescription = t.flood.tableDescription
+    .replace("{total}", String(floodReliefSummary.totalAffectedFamilies))
+    .replace("{community}", String(communityRecords.length));
+
   return (
     <div className="space-y-6">
       <GrievanceSubmissionForm onSubmitted={() => router.refresh()} />
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 sm:p-6">
+      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 sm:p-6 transition-opacity duration-200">
         <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h3 className="text-base font-semibold text-zinc-50 sm:text-lg">
-              Flood Aid Accountability Table
+              {t.flood.tableTitle}
             </h3>
-            <p className="mt-1 text-sm text-zinc-400">
-              {floodReliefSummary.totalAffectedFamilies}+ district records plus{" "}
-              {communityRecords.length} live community submission
-              {communityRecords.length === 1 ? "" : "s"} · refreshed every 10
-              minutes
-            </p>
+            <p className="mt-1 text-sm text-zinc-400">{tableDescription}</p>
           </div>
 
           <label className="w-full sm:max-w-xs">
-            <span className="sr-only">Search flood relief records</span>
+            <span className="sr-only">{t.flood.searchPlaceholder}</span>
             <input
               type="search"
               value={query}
               onChange={(event) => handleSearchChange(event.target.value)}
-              placeholder="Search village, grievance, status…"
+              placeholder={t.flood.searchPlaceholder}
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600"
             />
           </label>
@@ -122,18 +131,20 @@ export default function FloodAidAccountabilityTable({
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead className="border-b border-zinc-800 bg-zinc-950/80">
               <tr>
-                <th className="px-4 py-3 font-medium text-zinc-400">Family ID</th>
                 <th className="px-4 py-3 font-medium text-zinc-400">
-                  Village Area
+                  {t.flood.colFamilyId}
                 </th>
                 <th className="px-4 py-3 font-medium text-zinc-400">
-                  Grievance Type
+                  {t.flood.colVillage}
                 </th>
                 <th className="px-4 py-3 font-medium text-zinc-400">
-                  Administrative Relief Status
+                  {t.flood.colGrievance}
                 </th>
                 <th className="px-4 py-3 font-medium text-zinc-400">
-                  Evidence
+                  {t.flood.colStatus}
+                </th>
+                <th className="px-4 py-3 font-medium text-zinc-400">
+                  {t.flood.colEvidence}
                 </th>
               </tr>
             </thead>
@@ -144,7 +155,7 @@ export default function FloodAidAccountabilityTable({
                     colSpan={5}
                     className="px-4 py-8 text-center text-zinc-500"
                   >
-                    No records match your search.
+                    {t.flood.noResults}
                   </td>
                 </tr>
               ) : (
@@ -157,7 +168,7 @@ export default function FloodAidAccountabilityTable({
                       {record.familyId}
                       {record.isCommunitySubmission && (
                         <span className="mt-1 block text-[10px] text-violet-400">
-                          Community
+                          {t.flood.communityBadge}
                         </span>
                       )}
                     </td>
@@ -165,13 +176,15 @@ export default function FloodAidAccountabilityTable({
                       {record.villageArea}
                     </td>
                     <td className="px-4 py-3 text-zinc-400">
-                      {record.grievanceType}
+                      {record.isCommunitySubmission
+                        ? record.grievanceType
+                        : translateGrievance(record.grievanceType)}
                     </td>
                     <td className="px-4 py-3">
                       <span
                         className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium ${statusBadgeClass(record.reliefStatus)}`}
                       >
-                        {record.reliefStatus}
+                        {translateStatus(record.reliefStatus)}
                       </span>
                     </td>
                     <td className="px-4 py-3">
@@ -182,10 +195,12 @@ export default function FloodAidAccountabilityTable({
                           rel="noopener noreferrer"
                           className="text-xs text-blue-400 transition-colors hover:text-blue-300"
                         >
-                          View
+                          {t.flood.evidenceView}
                         </a>
                       ) : (
-                        <span className="text-xs text-zinc-600">—</span>
+                        <span className="text-xs text-zinc-600">
+                          {t.flood.evidenceNone}
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -197,13 +212,15 @@ export default function FloodAidAccountabilityTable({
 
         <div className="mt-4 flex flex-col items-center justify-between gap-3 text-xs text-zinc-500 sm:flex-row sm:text-sm">
           <p>
-            Showing{" "}
+            {t.flood.showing}{" "}
             {pageRecords.length === 0
               ? 0
               : (currentPage - 1) * PAGE_SIZE + 1}
-            –{(currentPage - 1) * PAGE_SIZE + pageRecords.length} of{" "}
-            {filteredRecords.length} records
-            {query ? ` (filtered from ${allRecords.length})` : ""}
+            –{(currentPage - 1) * PAGE_SIZE + pageRecords.length} {t.flood.of}{" "}
+            {filteredRecords.length} {t.flood.records}
+            {query
+              ? ` (${t.flood.filteredFrom} ${allRecords.length})`
+              : ""}
           </p>
 
           <div className="flex items-center gap-2">
@@ -213,10 +230,10 @@ export default function FloodAidAccountabilityTable({
               disabled={currentPage <= 1}
               className="rounded-md border border-zinc-800 px-3 py-1.5 text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Previous
+              {t.flood.previous}
             </button>
             <span className="text-zinc-600">
-              Page {currentPage} of {totalPages}
+              {t.flood.page} {currentPage} {t.flood.of} {totalPages}
             </span>
             <button
               type="button"
@@ -226,15 +243,12 @@ export default function FloodAidAccountabilityTable({
               disabled={currentPage >= totalPages}
               className="rounded-md border border-zinc-800 px-3 py-1.5 text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-50 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Next
+              {t.flood.next}
             </button>
           </div>
         </div>
 
-        <p className="mt-3 text-xs text-zinc-600">
-          Source: {floodReliefSummary.dataSource} · community rows stored in
-          Vercel KV (anonymous)
-        </p>
+        <p className="mt-3 text-xs text-zinc-600">{t.flood.sourceFooter}</p>
       </div>
     </div>
   );

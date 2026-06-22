@@ -9,7 +9,7 @@ function parseApiErrorMessage(message: string): string {
   }
 
   if (message === "An error occurred.") {
-    return "The AI backend failed—usually because OPENAI_API_KEY is missing or invalid. Add a valid key to .env.local and restart the dev server.";
+    return "The AI backend failed—usually because GOOGLE_GENERATIVE_AI_API_KEY is missing or invalid. Add a valid key to .env.local and restart the dev server.";
   }
 
   return message;

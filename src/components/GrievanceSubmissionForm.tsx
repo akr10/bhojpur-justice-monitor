@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 type GrievanceSubmissionFormProps = {
   onSubmitted?: () => void;
@@ -9,6 +10,7 @@ type GrievanceSubmissionFormProps = {
 export default function GrievanceSubmissionForm({
   onSubmitted,
 }: GrievanceSubmissionFormProps) {
+  const { t } = useLanguage();
   const [villageArea, setVillageArea] = useState("");
   const [grievanceDetails, setGrievanceDetails] = useState("");
   const [evidenceLink, setEvidenceLink] = useState("");
@@ -37,75 +39,72 @@ export default function GrievanceSubmissionForm({
 
       if (!response.ok) {
         setStatus("error");
-        setMessage(data.error ?? "Submission failed.");
+        setMessage(data.error ?? t.flood.errorNetwork);
         return;
       }
 
       setStatus("success");
-      setMessage(
-        "Grievance submitted anonymously. It will appear in the register after the next refresh cycle.",
-      );
+      setMessage(t.flood.success);
       setVillageArea("");
       setGrievanceDetails("");
       setEvidenceLink("");
       onSubmitted?.();
     } catch {
       setStatus("error");
-      setMessage("Network error. Please try again.");
+      setMessage(t.flood.errorNetwork);
     }
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4 sm:p-5"
+      className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4 sm:p-5 transition-opacity duration-200"
     >
       <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
-        Submit Anonymous Community Grievance
+        {t.flood.formTitle}
       </h3>
       <p className="mt-1 text-xs text-zinc-500 sm:text-sm">
-        No IP addresses, cookies, or browser metadata are stored—only the fields
-        below.
+        {t.flood.formDescription}
       </p>
 
       <div className="mt-4 space-y-3">
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-zinc-400">
-            Village Area
+            {t.flood.villageLabel}
           </span>
           <input
             type="text"
             required
             value={villageArea}
             onChange={(event) => setVillageArea(event.target.value)}
-            placeholder="e.g. Bilauti, Jawania"
+            placeholder={t.flood.villagePlaceholder}
             className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600"
           />
         </label>
 
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-zinc-400">
-            Grievance Details
+            {t.flood.detailsLabel}
           </span>
           <textarea
             required
             rows={3}
             value={grievanceDetails}
             onChange={(event) => setGrievanceDetails(event.target.value)}
-            placeholder="Describe the relief issue or administrative delay…"
+            placeholder={t.flood.detailsPlaceholder}
             className="w-full resize-y rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600"
           />
         </label>
 
         <label className="block">
           <span className="mb-1 block text-xs font-medium text-zinc-400">
-            Evidence Link (optional)
+            {t.flood.evidenceLabel}
           </span>
           <input
             type="url"
             value={evidenceLink}
             onChange={(event) => setEvidenceLink(event.target.value)}
-            placeholder="https://…"
+            placeholder={t.flood.evidencePlaceholder}
             className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-600"
           />
         </label>
@@ -116,7 +115,7 @@ export default function GrievanceSubmissionForm({
         disabled={status === "loading"}
         className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-zinc-50 px-4 py-2.5 text-sm font-semibold text-zinc-950 transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
       >
-        {status === "loading" ? "Submitting…" : "Submit Grievance"}
+        {status === "loading" ? t.flood.submitting : t.flood.submit}
       </button>
 
       {message && (

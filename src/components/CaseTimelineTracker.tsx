@@ -1,4 +1,9 @@
+"use client";
+
+import { useMemo } from "react";
 import { caseTimeline, type TimelineCategory } from "@/data/civicData";
+import { useLanguage } from "@/context/LanguageContext";
+import type { LocaleStrings } from "@/lib/locales";
 import type { NewsFeedItem } from "@/lib/news-feed";
 
 type TimelineEntry = {
@@ -13,32 +18,28 @@ type TimelineEntry = {
 
 const categoryStyles: Record<
   TimelineCategory | "news",
-  { dot: string; badge: string; label: string }
+  { dot: string; badge: string }
 > = {
   encounter: {
     dot: "bg-red-500",
     badge: "border-red-900/50 bg-red-950/40 text-red-300",
-    label: "Incident",
   },
   judicial: {
     dot: "bg-blue-500",
     badge: "border-blue-900/50 bg-blue-950/40 text-blue-300",
-    label: "Judicial",
   },
   administrative: {
     dot: "bg-amber-500",
     badge: "border-amber-900/50 bg-amber-950/40 text-amber-300",
-    label: "Administrative",
   },
   news: {
     dot: "bg-violet-500",
     badge: "border-violet-900/50 bg-violet-950/40 text-violet-300",
-    label: "Live Feed",
   },
 };
 
-function formatDate(isoDate: string) {
-  return new Intl.DateTimeFormat("en-IN", {
+function formatDate(isoDate: string, lang: "en" | "hi") {
+  return new Intl.DateTimeFormat(lang === "hi" ? "hi-IN" : "en-IN", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -46,15 +47,22 @@ function formatDate(isoDate: string) {
   }).format(new Date(`${isoDate}T00:00:00`));
 }
 
-function buildTimeline(newsItems: NewsFeedItem[]): TimelineEntry[] {
-  const staticEntries: TimelineEntry[] = caseTimeline.map((event) => ({
-    id: event.id,
-    date: event.date,
-    title: event.title,
-    description: event.description,
-    source: event.source,
-    category: event.category,
-  }));
+function buildTimeline(
+  newsItems: NewsFeedItem[],
+  timelineLocale: LocaleStrings["timeline"],
+): TimelineEntry[] {
+  const staticEntries: TimelineEntry[] = caseTimeline.map((event) => {
+    const localized = timelineLocale.events[event.id];
+
+    return {
+      id: event.id,
+      date: event.date,
+      title: localized?.title ?? event.title,
+      description: localized?.description ?? event.description,
+      source: localized?.source ?? event.source,
+      category: event.category,
+    };
+  });
 
   const liveEntries: TimelineEntry[] = newsItems.map((item) => ({
     id: item.id,
@@ -91,26 +99,28 @@ type CaseTimelineTrackerProps = {
 export default function CaseTimelineTracker({
   newsItems = [],
 }: CaseTimelineTrackerProps) {
-  const timeline = buildTimeline(newsItems);
+  const { t, currentLang } = useLanguage();
+  const timeline = useMemo(
+    () => buildTimeline(newsItems, t.timeline),
+    [newsItems, t.timeline],
+  );
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 sm:p-6">
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-5 sm:p-6 transition-opacity duration-200">
       <div className="mb-6">
         <h3 className="text-base font-semibold text-zinc-50 sm:text-lg">
-          Case Timeline Tracker
+          {t.timeline.title}
         </h3>
-        <p className="mt-1 text-sm text-zinc-400">
-          Verified milestones plus live syndicated updates from trusted press
-          sources (refreshed every 10 minutes).
-        </p>
+        <p className="mt-1 text-sm text-zinc-400">{t.timeline.description}</p>
       </div>
 
       <ol className="relative space-y-0">
         {timeline.length === 0 ? (
-          <li className="text-sm text-zinc-500">No timeline entries available.</li>
+          <li className="text-sm text-zinc-500">{t.timeline.empty}</li>
         ) : (
           timeline.map((event, index) => {
             const styles = categoryStyles[event.category];
+            const categoryLabel = t.timeline.categories[event.category];
             const isLast = index === timeline.length - 1;
 
             return (
@@ -133,12 +143,12 @@ export default function CaseTimelineTracker({
                       dateTime={event.date}
                       className="text-xs font-medium uppercase tracking-wide text-zinc-500"
                     >
-                      {formatDate(event.date)}
+                      {formatDate(event.date, currentLang)}
                     </time>
                     <span
                       className={`rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${styles.badge}`}
                     >
-                      {styles.label}
+                      {categoryLabel}
                     </span>
                   </div>
 
@@ -149,7 +159,7 @@ export default function CaseTimelineTracker({
                     {event.description}
                   </p>
                   <p className="mt-2 text-xs text-zinc-600">
-                    Source:{" "}
+                    {t.timeline.sourceLabel}:{" "}
                     {event.sourceUrl ? (
                       <a
                         href={event.sourceUrl}

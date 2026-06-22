@@ -1,0 +1,413 @@
+export type LocaleLang = "en" | "hi";
+
+export type LocaleStrings = {
+  nav: {
+    siteTitle: string;
+    siteTagline: string;
+    factsTimeline: string;
+    floodImpact: string;
+    aiAssistant: string;
+    langToggle: string;
+    primaryAria: string;
+  };
+  hero: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    highlights: [string, string, string];
+    ctaTimeline: string;
+    ctaFlood: string;
+  };
+  sections: {
+    factsTitle: string;
+    factsDescription: string;
+    floodTitle: string;
+    floodDescription: string;
+    aiTitle: string;
+    aiDescription: string;
+    verifiedSourcesTitle: string;
+    verifiedSourcesBody: string;
+    linkTimeline: string;
+    linkFloodTable: string;
+  };
+  timeline: {
+    title: string;
+    description: string;
+    empty: string;
+    sourceLabel: string;
+    categories: {
+      encounter: string;
+      judicial: string;
+      administrative: string;
+      news: string;
+    };
+    events: Record<
+      string,
+      { title: string; description: string; source: string }
+    >;
+  };
+  flood: {
+    formTitle: string;
+    formDescription: string;
+    villageLabel: string;
+    villagePlaceholder: string;
+    detailsLabel: string;
+    detailsPlaceholder: string;
+    evidenceLabel: string;
+    evidencePlaceholder: string;
+    submit: string;
+    submitting: string;
+    success: string;
+    errorNetwork: string;
+    tableTitle: string;
+    tableDescription: string;
+    searchPlaceholder: string;
+    colFamilyId: string;
+    colVillage: string;
+    colGrievance: string;
+    colStatus: string;
+    colEvidence: string;
+    communityBadge: string;
+    evidenceView: string;
+    evidenceNone: string;
+    noResults: string;
+    showing: string;
+    of: string;
+    records: string;
+    filteredFrom: string;
+    previous: string;
+    next: string;
+    page: string;
+    sourceFooter: string;
+    statuses: Record<string, string>;
+    grievanceTypes: Record<string, string>;
+  };
+  chat: {
+    name: string;
+    tagline: string;
+    welcome: string;
+    generating: string;
+    assistantLabel: string;
+    youLabel: string;
+    inputPlaceholder: string;
+    inputAria: string;
+    micStart: string;
+    micStop: string;
+    micUnsupported: string;
+    send: string;
+    stop: string;
+    listening: string;
+    footerIdle: string;
+    langBhojpuri: string;
+    langHindi: string;
+    langEnglish: string;
+  };
+};
+
+export const locales: Record<LocaleLang, LocaleStrings> = {
+  en: {
+    nav: {
+      siteTitle: "Bhojpur Justice Monitor",
+      siteTagline: "Civic transparency portal",
+      factsTimeline: "Facts & Timeline",
+      floodImpact: "Flood Impact Data",
+      aiAssistant: "AI Civic Assistant",
+      langToggle: "हिंदी",
+      primaryAria: "Primary",
+    },
+    hero: {
+      eyebrow: "Bhojpur Region · Civic Tech Utility",
+      title: "Objective, data-driven transparency for Bhojpur",
+      description:
+        "Bhojpur Justice Monitor is an independent civic transparency portal that surfaces verified facts, timelines, and flood impact data—helping residents, journalists, and advocates hold institutions accountable with evidence, not speculation.",
+      highlights: [
+        "Verified public records",
+        "Geospatial flood data",
+        "AI-assisted civic guidance",
+      ],
+      ctaTimeline: "Explore Facts & Timeline",
+      ctaFlood: "View Flood Impact Data",
+    },
+    sections: {
+      factsTitle: "Facts & Timeline",
+      factsDescription:
+        "Verified public milestones plus live press syndication for Bhojpur encounter coverage—cached for fast loads, refreshed every 10 minutes.",
+      floodTitle: "Flood Impact Data",
+      floodDescription:
+        "Searchable grievance register with anonymous community submissions stored in serverless KV.",
+      aiTitle: "AI Civic Assistant",
+      aiDescription:
+        "Ask about verified local facts, flood impact records, or request a neutral RTI template. The assistant auto-detects Bhojpuri, Hindi, and English—and stays grounded in objective civic data.",
+      verifiedSourcesTitle: "Verified data sources",
+      verifiedSourcesBody:
+        "The assistant is configured to answer only from civicData.ts, including the case timeline and flood relief register shown above.",
+      linkTimeline: "Case Timeline Tracker →",
+      linkFloodTable: "Flood Aid Accountability Table →",
+    },
+    timeline: {
+      title: "Case Timeline Tracker",
+      description:
+        "Verified milestones plus live syndicated updates from trusted press sources (refreshed every 10 minutes).",
+      empty: "No timeline entries available.",
+      sourceLabel: "Source",
+      categories: {
+        encounter: "Incident",
+        judicial: "Judicial",
+        administrative: "Administrative",
+        news: "Live Feed",
+      },
+      events: {
+        "evt-2026-06-17-encounter": {
+          title: "Bhojpur encounter",
+          description:
+            "A reported police encounter occurs in Bhojpur district. Local residents and civil society groups call for an independent account of events and preservation of evidence.",
+          source:
+            "District incident bulletin · verified press summary (2026-06-17)",
+        },
+        "evt-2026-06-20-probe": {
+          title: "High-level judicial probe ordered",
+          description:
+            "Chief Minister Samrat Choudhary orders a high-level judicial probe into the Bhojpur encounter, directing that proceedings remain transparent and time-bound.",
+          source: "State government order · CM office release (2026-06-20)",
+        },
+        "evt-2026-06-21-suspensions": {
+          title: "Police personnel suspensions",
+          description:
+            "Several police personnel connected to the Bhojpur encounter are placed under suspension pending the outcome of the judicial probe and departmental review.",
+          source:
+            "Home department notification · district HQ circular (2026-06-21)",
+        },
+      },
+    },
+    flood: {
+      formTitle: "Submit Anonymous Community Grievance",
+      formDescription:
+        "No IP addresses, cookies, or browser metadata are stored—only the fields below.",
+      villageLabel: "Village Area",
+      villagePlaceholder: "e.g. Bilauti, Jawania",
+      detailsLabel: "Grievance Details",
+      detailsPlaceholder:
+        "Describe the relief issue or administrative delay…",
+      evidenceLabel: "Evidence Link (optional)",
+      evidencePlaceholder: "https://…",
+      submit: "Submit Grievance",
+      submitting: "Submitting…",
+      success:
+        "Grievance submitted anonymously. It will appear in the register after the next refresh cycle.",
+      errorNetwork: "Network error. Please try again.",
+      tableTitle: "Flood Aid Accountability Table",
+      tableDescription:
+        "{total}+ district records plus {community} live community submission(s) · refreshed every 10 minutes",
+      searchPlaceholder: "Search village, grievance, status…",
+      colFamilyId: "Family ID",
+      colVillage: "Village Area",
+      colGrievance: "Grievance Type",
+      colStatus: "Administrative Relief Status",
+      colEvidence: "Evidence",
+      communityBadge: "Community",
+      evidenceView: "View",
+      evidenceNone: "—",
+      noResults: "No records match your search.",
+      showing: "Showing",
+      of: "of",
+      records: "records",
+      filteredFrom: "filtered from",
+      previous: "Previous",
+      next: "Next",
+      page: "Page",
+      sourceFooter:
+        "Source: District disaster management consolidated grievance register (public summary) · community rows stored in Vercel KV (anonymous)",
+      statuses: {
+        "Pending verification": "Pending verification",
+        "Under review": "Under review",
+        "Partially disbursed": "Partially disbursed",
+        Disbursed: "Disbursed",
+        "Escalated to district HQ": "Escalated to district HQ",
+      },
+      grievanceTypes: {
+        "Crop damage compensation": "Crop damage compensation",
+        "Ration kit delay": "Ration kit delay",
+        "Shelter material pending": "Shelter material pending",
+        "Cash relief pending": "Cash relief pending",
+        "Medical reimbursement": "Medical reimbursement",
+        "Livestock loss claim": "Livestock loss claim",
+      },
+    },
+    chat: {
+      name: "Bhojpur Civic Assistant",
+      tagline: "Objective local facts · RTI templates · Bhojpuri / Hindi / English",
+      welcome:
+        "Namaste. I am the Bhojpur Civic Assistant. Ask about verified local civic facts, flood impact data on this portal, or request a neutral RTI application template. I respond in Bhojpuri, Hindi, or English—whichever you use.",
+      generating: "Generating response from verified civic data…",
+      assistantLabel: "Assistant",
+      youLabel: "You",
+      inputPlaceholder: "Type or speak in Bhojpuri, Hindi, or English…",
+      inputAria: "Message the civic assistant",
+      micStart: "Start voice input",
+      micStop: "Stop voice input",
+      micUnsupported: "Speech recognition not supported in this browser",
+      send: "Send message",
+      stop: "Stop generating",
+      listening: "Listening… speak in Bhojpuri, Hindi, or English.",
+      footerIdle:
+        "Responses are grounded in civicData.ts—objective facts and RTI templates only.",
+      langBhojpuri: "Bhojpuri",
+      langHindi: "Hindi",
+      langEnglish: "English",
+    },
+  },
+  hi: {
+    nav: {
+      siteTitle: "भोजपुर जस्टिस मॉनिटर",
+      siteTagline: "नागरिक पारदर्शिता पोर्टल",
+      factsTimeline: "तथ्य और समयरेखा",
+      floodImpact: "बाढ़ प्रभाव डेटा",
+      aiAssistant: "AI नागरिक सहायक",
+      langToggle: "English",
+      primaryAria: "मुख्य नेविगेशन",
+    },
+    hero: {
+      eyebrow: "भोजपुर क्षेत्र · सिविक टेक उपयोगिता",
+      title: "भोजपुर के लिए वस्तुनिष्ठ, डेटा-आधारित पारदर्शिता",
+      description:
+        "भोजपुर जस्टिस मॉनिटर एक स्वतंत्र नागरिक पारदर्शिता पोर्टल है जो सत्यापित तथ्य, समयरेखा और बाढ़ प्रभाव डेटा प्रस्तुत करता है—निवासियों, पत्रकारों और अधिवक्ताओं को साक्ष्य के आधार पर जवाबदेही सुनिश्चित करने में मदद करता है।",
+      highlights: [
+        "सत्यापित सार्वजनिक अभिलेख",
+        "भू-स्थानिक बाढ़ डेटा",
+        "AI सहायता से नागरिक मार्गदर्शन",
+      ],
+      ctaTimeline: "तथ्य और समयरेखा देखें",
+      ctaFlood: "बाढ़ प्रभाव डेटा देखें",
+    },
+    sections: {
+      factsTitle: "तथ्य और समयरेखा",
+      factsDescription:
+        "सत्यापित सार्वजनिक मील के पत्थर और भोजपुर मुठभेड़ पर लाइव प्रेस सिंडिकेशन—तेज़ लोडिंग के लिए कैश, हर 10 मिनट में अपडेट।",
+      floodTitle: "बाढ़ प्रभाव डेटा",
+      floodDescription:
+        "अनाम समुदाय शिकायतों के साथ खोज योग्य शिकायत रजिस्टर, सर्वरलेस KV में संग्रहीत।",
+      aiTitle: "AI नागरिक सहायक",
+      aiDescription:
+        "सत्यापित स्थानीय तथ्य, बाढ़ राहत रिकॉर्ड, या तटस्थ RTI टेम्पलेट के बारे में पूछें। सहायक भोजपुरी, हिंदी और अंग्रेजी स्वतः पहचानता है।",
+      verifiedSourcesTitle: "सत्यापित डेटा स्रोत",
+      verifiedSourcesBody:
+        "सहायक केवल civicData.ts से उत्तर देने के लिए कॉन्फ़िगर है, जिसमें ऊपर दिखाई गई समयरेखा और बाढ़ राहत रजिस्टर शामिल हैं।",
+      linkTimeline: "केस टाइमलाइन ट्रैकर →",
+      linkFloodTable: "बाढ़ सहायता जवाबदेही तालिका →",
+    },
+    timeline: {
+      title: "केस टाइमलाइन ट्रैकर",
+      description:
+        "सत्यापित मील के पत्थर और विश्वसनीय प्रेस स्रोतों से लाइव अपडेट (हर 10 मिनट में रिफ्रेश)।",
+      empty: "कोई समयरेखा प्रविष्टि उपलब्ध नहीं।",
+      sourceLabel: "स्रोत",
+      categories: {
+        encounter: "घटना",
+        judicial: "न्यायिक",
+        administrative: "प्रशासनिक",
+        news: "लाइव फ़ीड",
+      },
+      events: {
+        "evt-2026-06-17-encounter": {
+          title: "भोजपुर मुठभेड़",
+          description:
+            "भोजपुर जिले में पुलिस मुठभेड़ की सूचना। स्थानीय निवासी और नागरिक समाज स्वतंत्र जांच और साक्ष्य संरक्षण की मांग कर रहे हैं।",
+          source:
+            "जिला घटना बुलेटिन · सत्यापित प्रेस सारांश (2026-06-17)",
+        },
+        "evt-2026-06-20-probe": {
+          title: "उच्च स्तरीय न्यायिक जांच का आदेश",
+          description:
+            "मुख्यमंत्री सम्राट चौधरी ने भोजपुर मुठभेड़ की उच्च स्तरीय न्यायिक जांच का आदेश दिया, कार्यवाही पारदर्शी और समयबद्ध रखने का निर्देश।",
+          source: "राज्य सरकार आदेश · CM कार्यालय विज्ञप्ति (2026-06-20)",
+        },
+        "evt-2026-06-21-suspensions": {
+          title: "पुलिसकर्मियों पर निलंबन",
+          description:
+            "भोजपुर मुठभेड़ से जुड़े कई पुलिसकर्मियों को न्यायिक जांच और विभागीय समीक्षा के परिणाम तक निलंबित किया गया।",
+          source:
+            "गृह विभाग अधिसूचना · जिला मुख्यालय परिपत्र (2026-06-21)",
+        },
+      },
+    },
+    flood: {
+      formTitle: "अनाम समुदाय शिकायत दर्ज करें",
+      formDescription:
+        "कोई IP पता, कुकी या ब्राउज़र मेटाडेटा संग्रहीत नहीं होता—केवल नीचे के फ़ील्ड।",
+      villageLabel: "गाँव / क्षेत्र",
+      villagePlaceholder: "जैसे बिलौती, जवानिया",
+      detailsLabel: "शिकायत विवरण",
+      detailsPlaceholder: "राहत या प्रशासनिक विलंब का विवरण लिखें…",
+      evidenceLabel: "साक्ष्य लिंक (वैकल्पिक)",
+      evidencePlaceholder: "https://…",
+      submit: "शिकायत जमा करें",
+      submitting: "जमा हो रहा है…",
+      success:
+        "शिकायत अनाम रूप से जमा हो गई। अगले रिफ्रेश चक्र के बाद रजिस्टर में दिखेगी।",
+      errorNetwork: "नेटवर्क त्रुटि। कृपया पुनः प्रयास करें।",
+      tableTitle: "बाढ़ सहायता जवाबदेही तालिका",
+      tableDescription:
+        "{total}+ जिला रिकॉर्ड और {community} लाइव समुदाय शिकायत · हर 10 मिनट में रिफ्रेश",
+      searchPlaceholder: "गाँव, शिकायत, स्थिति खोजें…",
+      colFamilyId: "परिवार ID",
+      colVillage: "गाँव / क्षेत्र",
+      colGrievance: "शिकायत प्रकार",
+      colStatus: "प्रशासनिक राहत स्थिति",
+      colEvidence: "साक्ष्य",
+      communityBadge: "समुदाय",
+      evidenceView: "देखें",
+      evidenceNone: "—",
+      noResults: "आपकी खोज से कोई रिकॉर्ड मेल नहीं खाता।",
+      showing: "दिखा रहे हैं",
+      of: "में से",
+      records: "रिकॉर्ड",
+      filteredFrom: "कुल",
+      previous: "पिछला",
+      next: "अगला",
+      page: "पृष्ठ",
+      sourceFooter:
+        "स्रोत: जिला आपदा प्रबंधन समेकित शिकायत रजिस्टर · समुदाय पंक्तियाँ Vercel KV में (अनाम)",
+      statuses: {
+        "Pending verification": "सत्यापन लंबित",
+        "Under review": "समीक्षाधीन",
+        "Partially disbursed": "आंशिक वितरण",
+        Disbursed: "वितरित",
+        "Escalated to district HQ": "जिला मुख्यालय को escalated",
+      },
+      grievanceTypes: {
+        "Crop damage compensation": "फसल क्षति मुआवज़ा",
+        "Ration kit delay": "राशन किट में देरी",
+        "Shelter material pending": "आश्रय सामग्री लंबित",
+        "Cash relief pending": "नकद राहत लंबित",
+        "Medical reimbursement": "चिकित्सा प्रतिपूर्ति",
+        "Livestock loss claim": "पशुधन हानि दावा",
+      },
+    },
+    chat: {
+      name: "भोजपुर नागरिक सहायक",
+      tagline: "वस्तुनिष्ठ स्थानीय तथ्य · RTI टेम्पलेट · भोजपुरी / हिंदी / English",
+      welcome:
+        "नमस्ते। मैं भोजपुर नागरिक सहायक हूँ। सत्यापित स्थानीय तथ्य, बाढ़ डेटा, या RTI टेम्पलेट के बारे में पूछें। मैं भोजपुरी, हिंदी या अंग्रेजी में उत्तर देता हूँ।",
+      generating: "सत्यापित नागरिक डेटा से उत्तर तैयार हो रहा है…",
+      assistantLabel: "सहायक",
+      youLabel: "आप",
+      inputPlaceholder: "भोजपुरी, हिंदी या अंग्रेजी में लिखें या बोलें…",
+      inputAria: "नागरिक सहायक को संदेश भेजें",
+      micStart: "वॉइस इनपुट शुरू करें",
+      micStop: "वॉइस इनपुट बंद करें",
+      micUnsupported: "इस ब्राउज़र में स्पीच रिकग्निशन समर्थित नहीं",
+      send: "संदेश भेजें",
+      stop: "जनरेशन रोकें",
+      listening: "सुन रहे हैं… भोजपुरी, हिंदी या अंग्रेजी में बोलें।",
+      footerIdle:
+        "उत्तर केवल civicData.ts पर आधारित—वस्तुनिष्ठ तथ्य और RTI टेम्पलेट।",
+      langBhojpuri: "भोजपुरी",
+      langHindi: "हिंदी",
+      langEnglish: "English",
+    },
+  },
+};
+
+export function getLocale(lang: LocaleLang): LocaleStrings {
+  return locales[lang];
+}
