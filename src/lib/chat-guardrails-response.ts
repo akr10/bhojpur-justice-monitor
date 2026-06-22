@@ -1,7 +1,7 @@
 import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
 
 export const GUARDRAIL_RESPONSE =
-  "I am a dedicated civic assistant for Bhojpur data and cannot answer outside topics.";
+  "I can only help with Bhojpur civic topics: the Bharat Tiwari / Bhojpur encounter timeline, flood relief records, RTI templates, and how to use this portal. Please ask about one of those.";
 
 export function createGuardrailStreamResponse(): Response {
   const stream = createUIMessageStream({
