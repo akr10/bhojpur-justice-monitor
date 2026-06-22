@@ -1,11 +1,35 @@
-import { civicData } from "@/data/civicData";
+import {
+  caseTimeline,
+  floodReliefRecords,
+  floodReliefSummary,
+} from "@/data/civicData";
+
+const SAMPLE_RECORD_COUNT = 20;
+
+function buildVillageBreakdown() {
+  const counts = new Map<string, number>();
+
+  for (const record of floodReliefRecords) {
+    counts.set(record.villageArea, (counts.get(record.villageArea) ?? 0) + 1);
+  }
+
+  return Object.fromEntries(counts);
+}
 
 /**
- * Serializes verified civic data for injection into the LLM system context.
- * Keeps flood records compact while preserving all fields the assistant may cite.
+ * Compact dataset for LLM context — full 612 records remain on the portal UI.
  */
 export function buildCivicDataContext(): string {
-  return JSON.stringify(civicData, null, 2);
+  const payload = {
+    caseTimeline,
+    floodReliefSummary,
+    villageBreakdown: buildVillageBreakdown(),
+    sampleFloodReliefRecords: floodReliefRecords.slice(0, SAMPLE_RECORD_COUNT),
+    lookupNote:
+      "The portal UI holds all 612 flood relief records. Cite familyId, villageArea, or event id when answering.",
+  };
+
+  return JSON.stringify(payload, null, 2);
 }
 
 export function buildFullSystemPrompt(basePrompt: string): string {

@@ -49,6 +49,17 @@ export async function POST(req: Request) {
 
   return result.toUIMessageStreamResponse({
     onError: (streamError) => {
+      console.error("[chat] OpenAI stream error:", streamError);
+
+      const errorText =
+        streamError instanceof Error
+          ? streamError.message
+          : JSON.stringify(streamError);
+
+      if (errorText.includes("insufficient_quota")) {
+        return "The civic assistant is paused: OpenAI API quota exceeded. Add billing or credits at platform.openai.com, then try again.";
+      }
+
       if (process.env.NODE_ENV === "development") {
         return streamError instanceof Error
           ? streamError.message
