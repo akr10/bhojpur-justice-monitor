@@ -14,14 +14,47 @@ export type NewsFeedItem = {
 };
 
 const SEARCH_QUERIES = [
-  "Bharat Tiwari Bhojpur",
-  "Bhojpur encounter Bihar",
-  "Bihar judicial probe Bhojpur",
-  "Bihar government Bhojpur official",
-  "Bihar flood relief grievance district",
-  "site:gov.in Bhojpur Bihar",
-  "site:pib.gov.in Bihar",
+  "Bharat Tiwari Bhojpur encounter",
+  "Bhojpur encounter Bihar judicial probe",
+  "Bharat Tiwari Bhojpur police",
+  "Bhojpur flood relief compensation Bihar",
+  "Bhojpur badh rahat shikayat",
+  "Bhojpur encounter Samrat Choudhary",
 ] as const;
+
+/** Earliest publish date — portal covers the 2026 Bhojpur civic crisis period. */
+const MIN_EVENT_DATE = "2026-01-01";
+
+const MAX_FEED_ITEMS = 40;
+
+/** Case identity — Bharat Tiwari or Bhojpur district in Bihar context. */
+const CASE_IDENTITY_PATTERNS: RegExp[] = [
+  /bharat\s*tiwar/i,
+  /भरत\s*तिवार/i,
+  /\bbhojpur\b/i,
+  /भोजपुर/,
+];
+
+/** Encounter, judicial probe, or civic flood-relief cause Bharat advocated for. */
+const CASE_OR_CAUSE_PATTERNS: RegExp[] = [
+  /encounter|mutbhed|muthbhed|muaavja|एनकाउंटर|मुठभेड/i,
+  /judicial\s*probe|nyayik\s*janch|न्यायिक\s*जांच|probe\s*ordered/i,
+  /police\s*suspension|nilamban|निलंबन/i,
+  /flood|relief|compensation|ration|grievance|badh|बाढ|राहत|मुआवज/i,
+  /accountability|transparency|pichara|पिछड़ा/i,
+  /samrat\s*choudhary|samrat\s*chaudhary/i,
+];
+
+/** Domains/topics that are never Bhojpur-case news despite matching gov.in filter. */
+const EXCLUDED_TOPIC_PATTERNS: RegExp[] = [
+  /\bbastar\b/i,
+  /\bchhattisgarh\b/i,
+  /\bmadhya\s*pradesh\b|\bmp\.gov/i,
+  /\bcisf\b/i,
+  /\bvimarsh\s*portal\b/i,
+  /7nishchay|yuva\s*upmission/i,
+  /\bcultural\s*capital\b/i,
+];
 
 const TRUSTED_MEDIA_PATTERNS = [
   /aaj\s*tak/i,
@@ -51,13 +84,11 @@ const TRUSTED_MEDIA_PATTERNS = [
 ];
 
 const OFFICIAL_SOURCE_PATTERNS = [
-  /gov\.in/i,
   /pib\.gov/i,
-  /nic\.in/i,
   /bihar\.gov/i,
-  /government/i,
-  /official/i,
-  /gazette/i,
+  /home\.bihar\.gov/i,
+  /disaster\.bihar\.gov/i,
+  /gov\.in.*bhojpur/i,
   /department\s+bulletin/i,
   /home\s+department/i,
   /disaster\s+management/i,
@@ -156,6 +187,52 @@ function isVerifiedLegalSource(
     isOfficialSource(title, sourceLabel, link) ||
     isTrustedMediaSource(title, sourceLabel, link)
   );
+}
+
+function buildRelevanceHaystack(
+  title: string,
+  description: string,
+  link: string,
+): string {
+  return `${stripHtml(title)} ${stripHtml(description)} ${link}`;
+}
+
+export function isTopicallyRelevantToBhojpurCase(
+  title: string,
+  description: string,
+  link: string,
+): boolean {
+  const haystack = buildRelevanceHaystack(title, description, link);
+
+  if (EXCLUDED_TOPIC_PATTERNS.some((pattern) => pattern.test(haystack))) {
+    return false;
+  }
+
+  const hasCaseIdentity = CASE_IDENTITY_PATTERNS.some((pattern) =>
+    pattern.test(haystack),
+  );
+
+  if (!hasCaseIdentity) {
+    return false;
+  }
+
+  // Bharat Tiwari by name is always on-topic for this portal.
+  if (/bharat\s*tiwar|भरत\s*तिवार/i.test(haystack)) {
+    return true;
+  }
+
+  return CASE_OR_CAUSE_PATTERNS.some((pattern) => pattern.test(haystack));
+}
+
+function isWithinRecencyWindow(isoDate: string): boolean {
+  const parsed = new Date(`${isoDate}T00:00:00`);
+  const minDate = new Date(`${MIN_EVENT_DATE}T00:00:00`);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return false;
+  }
+
+  return parsed.getTime() >= minDate.getTime();
 }
 
 function inferPublisherName(sourceLabel: string, link: string): string {
@@ -265,12 +342,28 @@ export async function fetchNewsFeed(): Promise<NewsFeedItem[]> {
         continue;
       }
 
+      if (
+        !isTopicallyRelevantToBhojpurCase(
+          item.title,
+          item.description,
+          item.link,
+        )
+      ) {
+        continue;
+      }
+
+      const eventDate = toIsoDate(item.pubDate);
+
+      if (!isWithinRecencyWindow(eventDate)) {
+        continue;
+      }
+
       seen.add(item.link);
 
       const normalized = normalizeNewsFeedItem({
         id: `news-${slugify(item.title)}-${slugify(item.link).slice(-8)}`,
         title: stripHtml(item.title),
-        eventDate: toIsoDate(item.pubDate),
+        eventDate,
         summary: buildNeutralSummary(item.title, item.description),
         source: formatSourceAttribution(
           item.title,
@@ -287,8 +380,10 @@ export async function fetchNewsFeed(): Promise<NewsFeedItem[]> {
     }
   }
 
-  return feed.sort(
-    (left, right) =>
-      new Date(right.eventDate).getTime() - new Date(left.eventDate).getTime(),
-  );
+  return feed
+    .sort(
+      (left, right) =>
+        new Date(right.eventDate).getTime() - new Date(left.eventDate).getTime(),
+    )
+    .slice(0, MAX_FEED_ITEMS);
 }
